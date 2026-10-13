@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ArrowUpRight, FileText, Mail, Award, CheckCircle2, Camera, RotateCcw } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowUpRight, FileText, Mail, Award, CheckCircle2 } from 'lucide-react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
 
 interface HeroSectionProps {
@@ -9,41 +9,11 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume, onOpenContact }) => {
   const { profile } = PORTFOLIO_DATA;
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [currentAvatar, setCurrentAvatar] = useState<string>(() => {
+  // Uses the user's uploaded picture from localStorage if present, falling back to profile.avatar
+  const [currentAvatar] = useState<string>(() => {
     return localStorage.getItem('pranav_custom_avatar') || profile.avatar;
   });
-
-  const [hasCustomAvatar, setHasCustomAvatar] = useState<boolean>(() => {
-    return Boolean(localStorage.getItem('pranav_custom_avatar'));
-  });
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        if (result) {
-          setCurrentAvatar(result);
-          setHasCustomAvatar(true);
-          try {
-            localStorage.setItem('pranav_custom_avatar', result);
-          } catch {
-            // In case of quota limit
-          }
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleResetAvatar = () => {
-    localStorage.removeItem('pranav_custom_avatar');
-    setCurrentAvatar(profile.avatar);
-    setHasCustomAvatar(false);
-  };
 
   return (
     <section id="about" className="relative pt-10 pb-16 md:pt-16 md:pb-24 overflow-hidden">
@@ -126,40 +96,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume, onOpenCo
           {/* Right Column (5 cols): Editorial Visual Container */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end">
             <div className="relative w-full max-w-md">
-              {/* Hidden File Input for Exact Photo Upload */}
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-                aria-label="Upload exact profile image file"
-              />
-
               {/* Card surface */}
               <div className="relative overflow-hidden rounded-2xl border border-[#3d2c20] bg-[#1c1511]/80 p-3 shadow-2xl backdrop-blur-sm">
                 <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-[#140f0c]">
-                  {/* Action button overlay to upload exact file */}
-                  <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5">
-                    {hasCustomAvatar && (
-                      <button
-                        onClick={handleResetAvatar}
-                        className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-[#140f0c]/85 hover:bg-[#2b1f17] text-[#cbb9aa] hover:text-white text-[11px] font-medium border border-[#3d2c20] transition-colors shadow-md cursor-pointer backdrop-blur-md"
-                        title="Reset to default image"
-                      >
-                        <RotateCcw className="w-3 h-3" />
-                      </button>
-                    )}
-                    <button
-                      onClick={() => fileInputRef.current?.click()}
-                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#140f0c]/90 hover:bg-[#c68b59] hover:text-[#18120e] text-[#f5ebe0] text-[11px] font-bold border border-[#473528] transition-all shadow-lg cursor-pointer backdrop-blur-md"
-                      title="Upload your exact original photo (e.g. BLAAHHH.jpeg) from device"
-                    >
-                      <Camera className="w-3.5 h-3.5" />
-                      <span>{hasCustomAvatar ? 'Change Photo' : 'Upload Exact Photo'}</span>
-                    </button>
-                  </div>
-
                   <img
                     src={currentAvatar}
                     alt="Pranav Sharma - Computer Science Student"
