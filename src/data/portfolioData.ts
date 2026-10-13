@@ -1,5 +1,3 @@
-import avatarImg from '../assets/images/pranav_profile_photo_1791906263244.jpg';
-
 export interface EducationItem {
   id: string;
   course: string;
@@ -43,7 +41,6 @@ export const PORTFOLIO_DATA = {
     age: '18',
     email: 'pranavvshrma@gmail.com',
     location: 'Vellore / Ghaziabad, India',
-    avatar: avatarImg,
     summary:
       'A first-year Computer Science and Engineering (CSE Core) student at VIT Vellore with a strong interest in web development and game development. Possesses a keen interest in programming, problem-solving, and emerging technologies, complemented by adaptability, analytical thinking, creativity, and a commitment to continuous learning and professional growth.',
     stats: [
